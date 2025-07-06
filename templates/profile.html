@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Protify - Profile</title>
+</head>
+<body>
+  <h1>User Profile</h1>
+  <form action="/update_profile" method="POST">
+    <label>Weight (kg):</label>
+    <input type="number" name="weight" value="{{ profile.weight }}" step="0.1"><br>
+
+    <label>Goal:</label>
+    <select name="goal">
+      <option value="bulking" {% if profile.goal == 'bulking' %}selected{% endif %}>Bulking</option>
+      <option value="cutting" {% if profile.goal == 'cutting' %}selected{% endif %}>Cutting</option>
+      <option value="maintaining" {% if profile.goal == 'maintaining' %}selected{% endif %}>Maintaining</option>
+    </select><br>
+
+    <label>Protein per kg:</label>
+    <input type="number" name="protein_per_kg" value="{{ profile.protein_per_kg }}" step="0.1"><br>
+
+    <button type="submit">Save</button>
+  </form>
+
+  <br>
+  <a href="/">Back to Dashboard</a>
+</body>
+</html>
