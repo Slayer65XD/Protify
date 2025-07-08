@@ -4,6 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Protify - Daily Protein Tracker</title>
+  <style>
+    .progress-bar {
+      width: 100%;
+      background-color: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    .progress {
+      height: 20px;
+      background-color: #4caf50;
+      width: {{ (log.total_protein / target) * 100 if target > 0 else 0 }}%;
+      max-width: 100%;
+      color: white;
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
   <h1>Protify - Daily Protein Tracker</h1>
@@ -11,16 +29,29 @@
   <p><strong>Protein Target:</strong> {{ target }}g</p>
   <p><strong>Total Protein Today:</strong> {{ log.total_protein }}g</p>
 
+  <div class="progress-bar">
+    <div class="progress">{{ ((log.total_protein / target) * 100) | round(1) }}%</div>
+  </div>
+
   <h2>Add Food</h2>
-  <form action="/add_food" method="POST">
-    <input type="text" name="food" placeholder="e.g. steak" required />
-    <button type="submit">Add</button>
-  </form>
+<form action="/add_food" method="POST">
+  <input type="text" name="food" placeholder="e.g. 2 scoops protein shake" required style="width: 300px;" />
+  <input type="number" step="0.1" name="protein_override" placeholder="Protein (g) - optional" style="width: 150px;" />
+  <button type="submit">Add</button>
+</form>
+
+
 
   <h3>Today's Foods:</h3>
   <ul>
     {% for food in log.foods %}
-      <li>{{ food.name }} — {{ food.protein }}g protein</li>
+      <li>
+        {{ food.name }} — {{ food.protein }}g protein
+        <form action="/remove_food" method="POST" style="display:inline;">
+          <input type="hidden" name="index" value="{{ loop.index0 }}">
+          <button type="submit">Remove</button>
+        </form>
+      </li>
     {% else %}
       <li>No foods logged yet.</li>
     {% endfor %}
