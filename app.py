@@ -105,6 +105,12 @@ def remove_food():
         del daily_log['foods'][index]
     return redirect(url_for('index'))
 
+@app.route('/clear_log', methods=['POST'])
+def clear_log():
+    daily_log['foods'].clear()
+    daily_log['total_protein'] = 0
+    return redirect(url_for('index'))
+
 @app.route('/profile')
 def profile():
     return render_template('profile.html', profile=user_profile)
